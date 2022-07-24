@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-
+int tick = 0;
 RF24 radio(7, 8); // CE, CSN
 
 const byte address[6] = "00001";
@@ -20,15 +20,21 @@ void setup()
 }
 
 void loop()
-{
-  int distance = sensor.getDistance(); 
-  if (distance < 50) {
-    
 
-     
+{
+  
+  int distance = sensor.getDistance(); 
+  if (distance < 37) {
+    tick += 1;
+    if (tick > 2) {
+      const char text[] = "ALERT!";
+      radio.write(&text, sizeof(text));
+    
+ 
+     Serial.println("TRIPPED");
      
      for (int i = 0;i <62;i++) {
-       tone(9,700);
+       tone(9,400);
        digitalWrite(5,HIGH);
          digitalWrite(4,HIGH);
          delay(80);
@@ -39,16 +45,14 @@ void loop()
         delay(80);
 
      }
-       const char text[] = "ALERT!";
-      radio.write(&text, sizeof(text));
-      delay(10000);
- 
+    }
+
+      
     
   }
-  else {
-  
-
-  }
+ else{
+        tick = 0;
+       }
   Serial.print(distance ); //Print the value to the serial monitor
   Serial.println(" CM");
 //  delay(500);
