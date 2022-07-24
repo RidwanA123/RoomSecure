@@ -14,8 +14,8 @@ def send_sms():
     message = client.messages \
         .create(
             body=text,
-            from_='+16108903881',
-            to='+15197215818'
+            from_='Phone Number From',
+            to='Phone Number To'
         )
 while True:
     trigger = arduino.readline().strip().decode("utf-8")
